@@ -1,0 +1,13 @@
+/*Standard Style*/
+@import "stylesheets/ASO.css";
+
+:root {
+    --Background: black;
+    --Foreground: white;
+    --Baseground: grey;
+    --Panel: rgba(100, 100, 100, 0.4);
+    --Panel2: rgba(64, 64, 64);
+    --PanelFaint: rgba(100, 100, 100, 0.2);
+    --Error: red;
+    --New: rgb(0, 255, 0);
+}
