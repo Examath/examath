@@ -1,6 +1,6 @@
 table, td {
     background: var(--Panel);
-    font-family: monospace;
+    font-family: 'Consolas', monospace;
 }
 
 td {
