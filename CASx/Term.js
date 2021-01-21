@@ -1,4 +1,4 @@
-/*Copyright (c) Paul Cyril 2020. 'cause I said so*/
+/*Copyright (c) Paul Cyril 2020. GNU GPL v2*/
 class Term {
     constructor(term) {
         this.Numerator = 1;

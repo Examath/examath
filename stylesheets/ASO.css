@@ -37,6 +37,20 @@ div.notice {
     right: 0;
     bottom: 0;
     opacity: 0.3;
+    transition: 4s;
+}
+
+div.notice:hover {
+    background: var(--Panel);
+    opacity: 1;
+}
+
+div.notice > a {
+    color: var(--Foreground);
+}
+
+div.notice > a:visited {
+    color: var(--Foreground);
 }
 
 @keyframes new {
