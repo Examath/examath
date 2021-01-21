@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico" />
+    <base target="_parent" />
+    <style>
+        html,
+        body {
+            background-color: black;
+            color: white;
+            font-family: Segoe UI;
+        }
+
+        body {
+            padding: 1em;
+            height: 100%;
+        }
+
+        a:link {
+            color: lightblue;
+        }
+
+        a:visited {
+            color: aqua;
+        }
+
+        div.flex {
+            display: flex;
+        }
+
+        @keyframes rainbow {
+            0% {
+                background-color: hsla(240, 100%, 50%, 0.5);
+            }
+
+            30% {
+                background-color: hsla(0, 100%, 50%, 0.5);
+            }
+
+            70% {
+                background-color: hsla(120, 100%, 50%, 0.5);
+            }
+
+            100% {
+                background-color: hsla(240, 100%, 50%, 0.5);
+            }
+        }
+
+        div.head {
+            margin-bottom: 0.5em;
+            padding: 0.5em;
+            background-color: hsla(240, 100%, 50%, 0.5);
+            animation: rainbow 30s linear 10s infinite;
+        }
+
+        div.flex>section {
+            padding: 0.5em;
+            margin-right: 0.5em;
+            padding-bottom: 1.4em;
+            display: flexbox;
+            background-color:rgba(255, 255, 255, 0.08);
+        }
+
+        div.flex>section>h1 {
+            margin: 0em 0em 0.5em 0em;
+            font-weight: normal;
+            font-size: 1em;
+        }
+
+        div.flex>section>a {
+            display: block;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: -0.9em;
+            padding: 0.5em;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        div.flex>section>a:hover {
+            background: white;
+            color:black;
+        }
+    </style>
+    <title>Spectra</title>
+</head>
+
+<body>
+    <div class="flex">
+        <section>
+            <h1>Maths</h1>
+            <a href="CASx/index.html">Computer Algebra System</a><br />
+            <a href="PiCalculator/index.html">Pi Calculator 2.0</a><br />
+            <a href="Sigma Calculator/index.html">Sigma Calculator</a>
+        </section>
+    </div>
+    <div class="console">
+
+    <script>
+    </script>
+</body>
+
+</html>
