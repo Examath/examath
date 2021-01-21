@@ -16,12 +16,6 @@ canvas, table {
     margin: 0.25em;
 }
 
-.icon {
-    font-family: Segoe MDL2 Assets;
-    width: 1.8em;
-    padding: 0;
-}
-
 .new {
     animation: 0.5s linear 2 alternate new;
 }

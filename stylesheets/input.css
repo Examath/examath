@@ -27,12 +27,30 @@ input[type=number] {
 input:focus {
     background: var(--Foreground);
     color: var(--Background);
+    outline: none;
 }
 
 input:invalid {
     border-color: var(--Error);
 }
 
+
+input.toggle:focus {
+    background: var(--Background);
+    color: var(--Foreground);
+}
+
+input.toggle.check {
+    background: var(--Foreground);
+    color: var(--Background);
+}
+
 input.toggle[checked] {
     border-color: var(--Foreground);
+}
+
+.icon {
+    font-family: Segoe MDL2 Assets;
+    width: 1.8em;
+    padding: 0;
 }
