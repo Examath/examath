@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>&pi; calculator 2.0</title>
+    <link href="Default.css" rel="stylesheet">
+</head>
+
+<body>
+    <h1 style="font-size:60px;" title="&pi; calculator 2.0 - Client Application">
+        <i>&pi;</i> Calculator <i style="color:blue;">2.0</i>
+    </h1>
+    <hr />
+    <input title="Amount of Terms (Number)" type="number" oninvalid="err('2')" min="1" max="60000" id="TermIn" value="40" /> 
+    <input style="background-color: green;" title="Control Button" type="button" id="Control" value="Run" onclick="Control()"/>
+    <select id="typ" title="Equation type">
+        <option value="1">Nilakantha infinte series</option>
+        <option value="2">Gregory-Libeniz infinte series</option>
+    </select>
+    <select id="echo" title="Print data?">
+        <option value="0">None</option>
+        <option value="1">&pi;</option>
+        <option value="2">Count&&pi;</option>
+        <option value="3">Count</option>
+    </select>
+    <input title="Delay between term" type="number" id="dly" min="1" value="1" max="1150" />
+    <input title="Refresing rate" type="number" id="rf" min="1" value="10" max="1150" />
+    <div style="font-family: consolas; color:red;" class="err" >
+        <noscript>Error 001: No Javascript Host! Please enable Javascript<br/></noscript>
+        <span id="err2">Err 002: To many terms!</span>
+    </div>
+    <hr />
+    <div id="progBar" style="display: none" title="Prosessing...">
+        Prosessing Command: - 
+        Term: <span id="termO"></span>
+        <input type="button" value="Pause" style="background-color: blue" id="ps" onclick="pause()"/>
+        <br />
+<svg width="680" height="60">
+    <rect y="13" x="13" width="608" height="25" style="fill:rgb(200,200,220);" rx="10" ry="10" class="o"/>
+    <rect y="13" x="13" width="0" height="25" style="fill:blue;" id="prog" rx="10" ry="10" />
+
+    <style>
+svg:hover .o {stroke:blue;stroke-width:12px}
+    </style>
+</svg>
+
+        <hr />
+    </div>
+    <span style="font-size:40px;">&pi; = <span id="pi">?</span>...</span>
+    <div style="font-family: consolas;" id="dtls">
+    </div>
+    <br/>
+    <table id="val" style="font-family: consolas;">
+    </table>
+
+<script src="Script.js"></script>
+
+</body>
+
+</html>

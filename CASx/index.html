@@ -1,0 +1,104 @@
+<!--Copyright (c) Paul Cyril 2020. 'cause I said so-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="Style.css"/>
+    <link rel="stylesheet" type="text/css" href="Toolbar.css"/>
+    <title>Document</title>    
+</head>
+
+<body>
+    <div class="toolbar">
+        <div>
+            <select id="Format" onchange="Calculate()" title="Fraction display mode">
+                <option selected value="0">Decimal</option>
+                <option value="1">Fractional Coefficient</option>
+                <option value="2">Fractional</option>
+            </select>
+        </div>
+        <div id="Pref" class="text" style="width: 3.5em" title="Speed of last calculation"></div>
+    </div>
+    <input id="Command" oninput="Calculate()" Value="2m/4s"/>
+    <br />
+    <div id="Output" class="math">
+    </div>
+    <div id="Final" class="math">
+    </div>
+    <script src="Term.js"></script>
+    <script src="math.js" type="text/javascript"></script>
+    <script>
+        var D = {
+            Command: document.getElementById("Command"),
+            Output: document.getElementById("Output"),
+            Final: document.getElementById("Final"),
+            Pref: document.getElementById("Pref"),
+            Format: document.getElementById("Format")
+        }
+
+        var M = {
+            Format: 1
+        }
+
+        function Calculate() {
+            var t = performance.now();
+            var [command, equation] = D.Command.value.split(":");
+            M.Format = Number(D.Format.value);
+
+            // Autorecogniser
+            if (!equation) {
+                equation = command;
+                command = "simplify";
+            }
+
+            command = command.toLowerCase();
+
+            var sn = equation.replace("-", "+-").split("+");
+            D.Output.innerHTML = `<i>${command}:</i>`;
+            D.Final.innerHTML = "";
+            var FirstTerm = true;
+            var Terms = new Array();
+
+            // Compute Terms
+            sn.forEach(el => {
+                var T = new Term(el);
+                D.Output.innerHTML += T.ToString(FirstTerm);
+                Terms.push(T);
+                FirstTerm = false;
+            });
+
+            switch (command) {
+                case "simplify":
+                    AddLikeTerms();
+                    var FirstTerm = true;
+                    Terms.forEach(T => {
+                        D.Final.innerHTML += T.ToString(FirstTerm);
+                        FirstTerm = false;
+                    });
+                    break;  
+                default:
+                    AddLikeTerms();
+                    break;
+            }
+
+            function AddLikeTerms() {
+                for (var i = 0; i < Terms.length; i++) {
+                    for (var j = i + 1; j < Terms.length; j++) {
+                        if (Terms[i].Likeness == Terms[j].Likeness) {
+                            Terms[i].Add(Terms[j]);
+                            Terms.splice(j, 1);
+                            j--;
+                        }
+                    }
+                }
+            }
+
+            D.Pref.innerHTML = `${Math.ceil(performance.now() - t)}ms`;
+        }
+
+        Calculate();
+    </script>
+</body>
+
+</html>

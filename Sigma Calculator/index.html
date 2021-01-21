@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sigma Calculator</title>
+
+    <link href="Stylesheets\Body.css" rel="stylesheet">
+    <link href="Stylesheets\Graph.css" rel="stylesheet">
+
+    <script src="Scripts/data.js"></script>
+    <script src="Scripts/templates.js"></script>
+    <script src="Scripts/script.js"></script>
+    <script src="Scripts/graph.js"></script>
+    <script src="Scripts/check.js"></script>
+</head>
+
+<body title="Sigma Calculator">
+
+    <div class="graphw" id="graphw" title="Sigma Calculator - Graph">
+        <img class="cor" src="Images\Close.png" onclick="closeGraph()" />
+    </div>
+
+    <div class="equation">
+        <i title="Answer is equal to...">A = </i>
+        <!--input type="number" class="suEqu" id="suEqu" title="Equation add-in" /-->
+        <span class="sigma">
+            &sum;
+        <input type="number" value="10" id="terms" title="Amount of times the equation is run" oninput="check()" data-vs="true"/>
+        <input type="number" value="1" style="top: 247px;" id="preEqu" title="Starting value" oninput="check()" data-vs="true"/>
+        </span>
+        <textarea title="Equation" id="Equ" oninput="check()" data-vs="true" spellcheck="false" >n*2</textarea>
+    </div>
+
+    <hr />
+
+    <!--form class="btns"-->
+        <input style="background-color: green;" title="Control Button" type="button" id="Control" value="Run" onclick="Control()"
+        class="bb" />
+        <input type="number" min="0" max="1260" title="Preformance delay between each term" id="dly" value="1" class="bb" />
+        <input type="number" min="1" max="10260" title="refresh rate" id="rfs" value="1" class="bb" />
+        <select id="output" title="Output Settings">
+            <option value="0">None</option>
+            <option value="1">Formated</option>
+            <optgroup label="Specific Values:">
+                <option value="2">n</option>
+                <option value="3">Term value</option>
+                <option value="4">Sum value</option>
+            </optgroup>
+        </select>
+        <input type="button" id="draw" value="Draw Graph" onclick="drawGraph()" title="Draw a graph with the previous data" style="display:none;"
+        class="bb" />
+        <select id="tmp" title="Templates (Click '+' to Add)">
+            <optgroup label="Number Pattens">
+                <option value="n">Triangular Numbers</option>
+                <option value="n*n">Sum of Squares</option>
+            </optgroup>
+            <option value="2">Multiplication</option>
+            <optgroup label="&pi; calculations">
+                <option value="(4/(n*2-1))*Math.pow(-1,n)*(-1)">Gregory-Libeniz infinte series</option>
+                <option value="(4/((n*2)*(n*2+1)*(n*2+2)))*Math.pow(-1,n)*(-1)">Nilakantha infinte series</option>
+            </optgroup>
+        </select>
+        <input type="button" value="+" onclick="add()" title="Click to add template" style="width: 30.98px;" class="bb" />
+    <!--/form-->
+
+    <hr />
+
+    <span style="font-family: Arial;color:blue;" onclick="dt()" id="dt" title="Show or Hide Details">+ More</span>
+    <br />
+    <div id="progBar" title="Details">
+        Term: <span id="termO">0/?</span>
+        <br />
+        <span id="dts" style="color:blue">Click 'Run' to start</span>
+        <br />
+        <span id="tpp">ATS Co.</span>
+        <br />
+    </div>
+    <svg width="680" height="60" title="Current Progress">
+        <rect y="13" x="13" width="608" height="25" style="fill:rgb(200,200,220);" rx="10" ry="10" class="o"></rect>
+        <rect y="13" x="13" width="0" height="25" style="fill:blue;" id="prog" rx="10" ry="10"></rect>
+
+        <style>
+            svg:hover .o {
+                stroke: blue;
+                stroke-width: 12px
+            }
+        </style>
+    </svg>
+
+    <hr />
+
+    <div class="ans">
+        <i title="Answer is equal to...">A = </i>
+        <span id="ans">?</span>
+    </div>
+
+    <div class="wrapper">
+        <table id="val" style="font-family: consolas;">
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+body {
+    font-family: Arial;
+}
+
+input, select{
+    border-radius: 8px;
+    color: lightgray;
+    background-color: rgba(0,0,0,0.7);
+    padding: 5px;
+    font-size: 15px;
+    margin: 4px;
+}
+
+input:hover, select:hover {
+    background-color: black;
+}
+
+input:focus, select:focus {
+    background-color: black;
+    color: white;
+}
+
+input:invalid{
+    background-color: red;
+}
+
+table .a{
+    width: 100px
+}
+
+.err span {
+    display: none;
+}

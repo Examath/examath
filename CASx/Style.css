@@ -1,0 +1,30 @@
+/*Copyright (c) Paul Cyril 2020. 'cause I said so*/
+div.math {
+    display: flex;
+    align-items: center;
+}
+
+div.math div {
+    display: inline-block;
+    margin-right: 0.2em;
+    text-align: center;
+}
+
+div.math div hr {
+    border-style: solid;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+div.math sup {
+    margin-bottom: 0.8em;
+}
+
+div.math i {
+    margin-right: 0.5em;
+}
+
+div.math span.sym {
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+}

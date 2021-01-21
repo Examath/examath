@@ -1,0 +1,117 @@
+.equation {
+    font-size: 100px;
+    margin: 20px;
+    height: 250px;
+}
+
+.equation textarea {
+    height: 200px;
+    font-size: 100px;
+    overflow: visible;
+    vertical-align: middle;
+    font-family:Cambria;
+    overflow: visible;
+    width: calc(100% - 400px);
+    border: none;
+    transition: text-shadow 0.5s, color 0.4s;
+}
+
+.equation textarea:hover {
+    text-shadow: 10px 10px 5px rgba(0,0,0,0.3);
+}
+
+.equation textarea:focus[data-vs=true] {
+    color: green;
+}
+
+.equation textarea[data-vs=false] {
+    color: red;
+}
+
+.sigma {
+    font-size:200px;
+    display: inline-block;
+}
+
+.sigma input {
+    position: absolute;
+    font-size: 20px;
+    width: 100px;
+    left: 220px;
+    text-align: center;
+    border-radius: 16px;
+    border: none;
+    transition: box-shadow 0.5s, border 0.4s;
+    background-color: white;
+    color: black;
+}
+
+.sigma input:hover {
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.3);
+    background-color: transparent;
+}
+
+.sigma input:focus:valid[data-vs=true] {
+    border: 1px solid green;
+}
+
+.sigma input[data-vs=false], .sigma input:invalid {
+    border: 1px solid red;
+}
+
+.bb, select {
+    border-radius: 8px;
+    color: white;
+    background-color: rgba(0,0,0,0.7);
+    padding: 5px;
+    font-size: 15px;
+    margin: 4px;
+    transition: box-shadow 0.5s, background 0.4s;
+}
+
+.bb:hover, select:hover {
+    background-color: black;
+}
+
+.bb:focus, select:focus {
+    background-color: black;
+    box-shadow: 5px 5px 4px rgba(0,0,0,0.3);
+}
+
+.bb:invalid {
+    background: red;
+}
+
+#progBar {
+    font-family: "Consolas";
+    display: none;
+    padding-left: 20px;
+}
+
+
+.ans {
+    font-size: 100px;
+    margin-left: 26px;
+}
+
+#ans {
+    font-family: 'Consolas'; 
+}
+
+.wrapper {
+    height: 180px;
+    overflow-x: scroll;
+    transition: color 0.5s;
+}
+
+.wrapper table:hover {
+    color: blue;
+}
+
+.wrapper table::selection {
+    color: white;
+}
+
+#val .r {
+    text-align: right;
+}

@@ -1,0 +1,153 @@
+<!--Copyright (c) Paul Cyril 2020. 'cause I said so. This is also an outdated version of CASx. use index.html for latest version-->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="Command" oninput="Calculate()" />
+    <br />
+    <div id="Output">
+    </div>
+    <div id="Final">
+    </div>
+    <script>
+
+        var D = {
+            Command: document.getElementById("Command"),
+            Output: document.getElementById("Output"),
+            Final: document.getElementById("Final")
+        }
+
+        class Term {
+            constructor(term) {
+                this.Coefficient = 1;
+                this.Variables = new Array();
+                this.CoefficentSet = false;
+                var length = term.length;
+                var nbuffer = "";
+                var nchar = false;
+                var nix = 1;
+                var valuable = false;
+                for (let i = 0; i < length; i++) {
+                    const chc = term.charCodeAt(i);
+                    if (chc == 45 || chc == 46 || chc >= 48 && chc <= 57) {
+                        nchar = true;
+                        nbuffer += term.charAt(i);
+                    }
+                    else if (chc == 47) {
+                        ncalc(this);
+                        nix = (nix > 0) ? -1 : 1
+                    }
+                    else if (chc == 42) {
+                        nix = 1;
+                    }
+                    else {
+                        const char = term.charAt(i);
+                        ncalc(this);
+                        valuable = true;
+                        if (chc != 32) {
+                            var j = this.Variables.findIndex((e) => e.Symbol == char);
+                            if (j >= 0) {
+                                this.Variables[j].Index += nix;
+                            }
+                            else {
+                                this.Variables.push({ Symbol: char, Index: nix })
+                            }
+                        }
+                    }
+                }
+
+                if (nbuffer != "-") ncalc(this);
+
+                for (let i = 0; i < this.Variables.length; i++) {
+                    if (this.Variables[i].Index == 0) {
+                        this.Variables.splice(i, 1);
+                        i--;
+                    };
+                }
+
+                if (!valuable) {
+                    this.Coefficient = 0;
+                    return;
+                }
+
+                this.Likeness = "";
+                this.Variables.forEach(element => {
+                    var i = element.Index;
+                    while (i > 0) {
+                        this.Likeness += element.Symbol;
+                        i--;
+                    }
+                });
+                this.Likeness = this.Likeness.split('').sort().join('');
+
+                function ncalc(o) {
+                    if (nchar) {
+                        nchar = false;
+                        if (nix > 0) {
+                            o.Coefficient *= Number(nbuffer);
+                        }
+                        else {
+                            o.Coefficient /= Number(nbuffer);
+                        }
+                        nbuffer = "";
+                        valuable = true;
+                        o.CoefficentSet = true;
+                    }
+                    else return 1;
+                }
+            }
+
+            ToString(FirstTerm = false) {
+                // +/-
+                if (this.Coefficient == 0) return "";
+                var out = (this.Coefficient > 0) ? " + " : " - ";
+                if (FirstTerm && this.Coefficient > 0) out = "";
+                if (this.CoefficentSet) out += Math.abs(this.Coefficient);
+                this.Variables.forEach(variable => {
+                    out += variable.Symbol;
+                    if (variable.Index != 1) out += `<sup>${variable.Index}</sup>`;
+                })
+                return out;
+            }
+        }
+
+        Term.prototype.equal = function (x) {
+
+        }
+
+        function Calculate() {
+            var sn = D.Command.value.replace("-", "+-").split("+");
+            D.Output.innerHTML = "";
+            D.Final.innerHTML = "";
+            var FirstTerm = true;
+            var Terms = new Array();
+
+            // Compute Terms
+            sn.forEach(el => {
+                var T = new Term(el);
+                D.Output.innerHTML += T.ToString(FirstTerm);
+                Terms.push(T);
+                FirstTerm = false;
+            });
+
+            // Like Addition
+            for (var i = 0; i < Terms.length; i++) {
+                for (var j = i + 1; j < Terms.length; j++) {
+                    if (Terms[i].Likeness == Terms[j].Likeness) {
+                        Terms[i].Coefficient += Terms[j].Coefficient;
+                        Terms.splice(j, 1);
+                        j--;
+                    }
+                }
+                D.Final.innerHTML += Terms[i].ToString(i == 0);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+table, td {
+    background: var(--Panel);
+    font-family: monospace;
+}
+
+td {
+    padding: 0 0.2em;
+}
+
+table input.static {
+    color: white;
+    background: transparent;
+    border: 2px solid transparent;
+}
+
+table input.static:hover {
+    border: 2px solid var(--Baseground);
+}
+
+table input.static:focus {
+    background: var(--Foreground);
+    color: var(--Background);
+}
+
+td:empty {
+    opacity: 0;
+}
+
+table.large {
+    border-spacing: 0.2em;
+}
+
+tr:first-child>td, td:first-child {
+    background: var(--PanelFaint);
+}

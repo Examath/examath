@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
+    <style>
+
+        tr.times {
+            background: rgba(100, 100, 100, 0.2);
+        }
+
+        tr.h {
+            opacity: 0.2;
+            font-size: 0.4em;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <table id="Table" class="large">
+        <tr class="header">
+            <td>
+                <input id="disp" type="button" value="Disp" class="small" onclick="disp()" />
+            </td>
+            <td>HG</td>
+            <td>1</td>
+            <td>2</td>
+            <td>Recess</td>
+            <td>3</td>
+            <td>4</td>
+            <td>Lunch</td>
+            <td>5</td>
+            <td>6</td>
+            <td>A</td>
+        </tr>
+        <tr class="times" id="tm">
+            <td></td>
+            <td>0845</td>
+            <td>0855</td>
+            <td>0935</td>
+            <td>1035</td>
+            <td>1055</td>
+            <td>1155</td>
+            <td>1255</td>
+            <td>1330</td>
+            <td>1430</td>
+        </tr>
+        <tr class="h" id="1">
+            <td>MON</td>
+            <td>HomeG</td>
+            <td>PsDev</td>
+            <td>1MMtB</td>
+            <td></td>
+            <td>1MMtA</td>
+            <td>2Phys</td>
+            <td></td>
+            <td>RProj</td>
+        </tr>
+        <tr class="times" id="to">
+            <td></td>
+            <td>0845</td>
+            <td>0855</td>
+            <td>0947</td>
+            <td>1040</td>
+            <td>1100</td>
+            <td>1152</td>
+            <td>1245</td>
+            <td>1320</td>
+            <td>1415</td>
+            <td>1505</td>
+        </tr>
+        <tr class="h" id="2">
+            <td>TUE</td>
+            <td>HomeG</td>
+            <td colspan="2">2Phys</td>
+            <td></td>
+            <td colspan="2">1Chem</td>
+            <td></td>
+            <td>1ELit</td>
+            <td>1MMtA</td>
+        </tr>
+        <tr class="h" id="3">
+            <td>WED</td>
+            <td>HomeG</td>
+            <td colspan="2">1ELit</td>
+            <td></td>
+            <td colspan="2">1MMtB</td>
+            <td></td>
+            <td>2Phys</td>
+            <td>Elctr</td>
+        </tr>
+        <tr class="h" id="4">
+            <td>THU</td>
+            <td>HomeG</td>
+            <td>RProj</td>
+            <td>2Phys</td>
+            <td></td>
+            <td colspan="2">1MMtA</td>
+            <td></td>
+            <td>1Chem</td>
+            <td>1MMtB</td>
+        </tr>
+        <tr class="h" id="5">
+            <td>FRI</td>
+            <td>HomeG</td>
+            <td colspan="2">Elctr</td>
+            <td></td>
+            <td>1Chem</td>
+            <td>1ELit</td>
+            <td></td>
+            <td>2Phys</td>
+            <td>RProj</td>
+        </tr>
+    </table>
+
+    <script>
+var D = [
+    {
+        id: "HomeG",
+        col: "#7F7F7F"
+    },
+    {
+        id: "PsDev",
+        col: "#000000"
+    },
+    {
+        id: "1Chem",
+        col: "#FF0000"
+    },
+    {
+        id: "Elctr",
+        col: "#00FFD5"
+    },
+    {
+        id: "1ELit",
+        col: "#007FFF"
+    },
+    {
+        id: "1MMtA",
+        col: "#50008C"
+    },
+    {
+        id: "1MMtB",
+        col: "#000078"
+    },
+    {
+        id: "2Phys",
+        col: "#00A082"
+    },
+    {
+        id: "RProj",
+        col: "#FF7F00"
+    },
+]
+
+$("td").each(function(i) {
+    D.forEach(subj => {
+        if (subj.id == this.innerHTML) {
+            this.style.background = subj.col;
+            this.style.color = "white";
+        }
+    });
+})
+
+var T = new Date();
+var sd = T.getDay();
+if (T.getHours() > 15) {   
+    sd++;
+}
+if (sd == 6 || sd == 0) sd = 1;
+if (sd == 1) $("#to").hide();
+else $("#tm").hide();
+$("#" + sd).removeClass("h");
+
+function disp() {
+    $("#tm").show();
+    $("#to").show();
+    $("#1").removeClass("h");
+    $("#2").removeClass("h");
+    $("#3").removeClass("h");
+    $("#4").removeClass("h");
+    $("#5").removeClass("h");
+    document.getElementById("asostyle").setAttribute("href", "../ASO-L.css"); 
+}
+    </script>
+</body>
+</html>
