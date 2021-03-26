@@ -4,36 +4,47 @@
 <head>
     <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
     <meta name="year" content="2021" />
+    <meta name="version" content="3.0" />
     <style>
-        textarea {
-            font-size: 20mm;
+        #text {
+            font-size: 10mm;
             margin: 2rem;
             width: calc(100vw - 8rem);
             height: calc(100vh - 8rem);
             background-color: var(--Background);
             color: var(--Foreground);
+            overflow-y: scroll;
         }
 
-        textarea.flip {
-            transform: scale(-1, 1);
+        #text.flipX {
+            transform: scaleX(-1);
+        }
+
+        #text.flipY {
+            transform: scaleY(-1);
         }
     </style>
 </head>
 
 <body>
     <div class="toolbar">            
-        <input type="button" class="icon toggle check new" value="&#xE8AF;" title="Flip text transform"
-            onclick="B = Check(this,B); SwitchClass(Get('text'), 'flip', !B);" />
-        <input type="number" value="20" title="Font size" onchange="Get('text').style.fontSize = this.value + 'mm';" />
+        <input type="button" class="icon toggle check new" value="&#xE970;" title="Horizontaly flip text"
+            onclick="B = Check(this,B); SwitchClass(Get('text'), 'flipX', !B);" />
+        <input type="button" class="icon toggle" value="&#xE96E;" title="Verticaly flip text"
+            onclick="C = Check(this,C); SwitchClass(Get('text'), 'flipY', !C);" />
+        <input type="number" value="10" title="Font size" onchange="Get('text').style.fontSize = this.value + 'mm';" />
         <input value="white" title="Colour" onchange="Get('text').style.color = this.value" />
+        <input value="Arial" title="Font" onchange="Get('text').style.fontFamily = this.value" />
     </div>
-    <textarea id="text" class="flip">
+    <!--textarea id="text" class="flip"-->
+    <div id="text" class="flipX" contenteditable="true">
 Hello
 Reflect this off a transparent sheet in front of the camera.
-    </textarea>
+    </div>
     <script src="../ASO.js"></script>
     <script>
         var B = false;
+	var C = true;
     </script>
 </body>
 
