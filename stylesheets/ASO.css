@@ -1,20 +1,38 @@
 @import "toolbar.css";
 @import "table.css";
 @import "input.css";
-
 html {
     background: var(--Background);
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
     color: var(--Foreground);
     font-family: Segoe UI, Arial, Helvetica, sans-serif;
     font-size: 1em;
+    margin: 0.25em 0.25em 1em 0.25em;
+    padding: 0.25em 0 0 0.25em;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 2em);
 }
 
 canvas, table {
-    margin: 0.25em;
+    margin: 0 0.25em 0.25em 0;
 }
+
+div.toolbar, div.split {
+    display: flex;
+}
+
+div.toolbar, div.split>div {
+    margin: 0 0.25em 0.25em 0;
+    padding: 0.25em 0 0 0.25em;
+    background: var(--Panel);
+}
+
+/* General */
 
 .new {
     animation: 0.5s linear 2 alternate new;
@@ -32,12 +50,67 @@ canvas, table {
     font-size: 0.625em;
 }
 
+.fill {
+    flex: 1 1 auto;
+}
+
+.console {
+    font-family: 'Consolas', monospace;
+    overflow-y: auto;
+}
+
+/* Panel */
+
+div.split {
+    flex-wrap: nowrap;
+}
+
+div.split>div {
+    resize: horizontal;
+    overflow: auto;
+    min-width: 1em;
+    min-height: 1em;
+}
+
+div.split.vertical {
+    flex-direction: column;
+}
+
+div.split.vertical>div {
+    resize: vertical;
+}
+
+div.split>div:last-child {
+    resize: none;
+    flex: 1 1 auto;
+}
+
+div.split>div.split {
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes new {
+    from {
+        background: var(--Background);
+    }
+    to {
+        background: var(--New);
+    }
+}
+
+/* Standard Footer */
+
 div.notice {
     position: fixed;
-    right: 0;
+    left: 0.5em;
+    width: calc(100% - 1em);
     bottom: 0;
     opacity: 0.3;
     transition: 4s;
+    height: 1.5em;
+    text-align: right;
 }
 
 div.notice:hover {
@@ -45,20 +118,10 @@ div.notice:hover {
     opacity: 1;
 }
 
-div.notice > a {
+div.notice>a {
     color: var(--Foreground);
 }
 
-div.notice > a:visited {
+div.notice>a:visited {
     color: var(--Foreground);
-}
-
-@keyframes new {
-    from {
-        background: var(--Background);
-    }
-
-    to {
-        background: var(--New);
-    }
 }

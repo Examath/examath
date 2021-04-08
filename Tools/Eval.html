@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
+    <meta name="year" content="2021" />
+    <meta name="version" content="1.0" />
+    <style>
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+        <input type="button" class="icon" value="&#xE768;" title="Run Script" onclick="Run()" />
+        <div id="Time" class="text"></div>
+    </div>
+    <div class="split fill">
+        <div class="split vertical" style="width: 50%;">
+            <div style="height: 40%;">
+                <textarea id="Data" class="fill" title="Data panel (access using variable x)">1
+2
+3
+4
+5
+6
+7
+8
+9
+0</textarea>
+            </div>
+            <div>
+                <textarea id="Script" class="fill" title="Script (.js) - Run using eval()" spellcheck="false">
+var a = x.split("\n");
+var n = [];
+var total;
+var average;
+a.forEach(element => {
+    var value = Number(element);
+    if (value === value) n.push(value);
+});
+Output.innerHTML = "";
+for (let index = 1; index <= 10; index++) {
+    let b = getRandomSubarray(n, index);
+    total = 0;
+    b.forEach(el => {
+        total += el;
+    });
+    average = total / index;
+    //Output.innerHTML += average + " | " + b.toString() + "<br/>";    
+    Output.innerHTML += average + "<br/>";                
+}
+//Demo1();
+                </textarea>
+            </div>
+        </div>
+        <div ><div id="Output" style="overflow: auto; max-height: 85vh;" class="console" title="Output box. Access using 'Output'">_</div></div>
+        
+    </div>
+    <script src="../ASO.js"></script>
+    <script>
+        var Data = Get("Data");
+        var Script = Get("Script");
+        var Output = Get("Output");
+        var Time = Get("Time");
+        var x = "";
+
+        function Run() {
+            var t = performance.now();
+            x = Data.value;
+            eval(Script.value);
+            Time.innerHTML = (Math.round((performance.now() - t) * 10) / 10).toString() + "ms";
+        }
+
+        function Demo1() {
+            var a = x.split("\n");
+            var n = [];
+            var total;
+            var average;
+            a.forEach(element => {
+                var value = Number(element);
+                if (value === value) n.push(value);
+            });
+            Output.innerHTML = "";
+            for (let index = 1; index <= 10; index++) {
+                let b = getRandomSubarray(n, index);
+                total = 0;
+                b.forEach(el => {
+                    total += el;
+                });
+                average = total / index;
+                //Output.innerHTML += average + " | " + b.toString() + "<br/>";    
+                Output.innerHTML += average + "<br/>";
+            }
+        }
+
+        Run();//1.74035598705502
+
+        // by https://stackoverflow.com/users/96100/tim-down
+        function getRandomSubarray(arr, size) {
+            var shuffled = arr.slice(0), i = arr.length, min = i - size, temp, index;
+            while (i-- > min) {
+                index = Math.floor((i + 1) * Math.random());
+                temp = shuffled[index];
+                shuffled[index] = shuffled[i];
+                shuffled[i] = temp;
+            }
+            return shuffled.slice(min);
+        }
+    </script>
+</body>
+
+</html>

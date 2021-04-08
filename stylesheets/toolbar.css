@@ -1,11 +1,8 @@
-div.toolbar {
-    padding: 0.25em 0 0 0.25em;
-    background: var(--Panel);
-    display: flex;
+div.toolbar, div.splitpanel {    
     flex-wrap: wrap;
 }
 
-div.toolbar>div {
+div.toolbar>div:not(.text) {
     margin: 0 0.25em 0.25em 0;
     padding: 0.25em 0 0 0.25em;
     display: inline-flex;
@@ -20,6 +17,7 @@ div.toolbar>div>div {
     padding: 0.2em 0.25em 0.25em 0.25em;
 }
 
+/* Tooltip */
 div.toolbar>div>span {
     background: var(--Panel2);
     position: absolute;
