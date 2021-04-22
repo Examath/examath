@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
     <style>
-
         tr.times {
             background: rgba(100, 100, 100, 0.2);
         }
@@ -18,11 +18,13 @@
     </style>
     <title>Document</title>
 </head>
+
 <body>
     <table id="Table" class="large">
         <tr class="header">
             <td>
                 <input id="disp" type="button" value="21.1.1" onclick="disp()" title="Change to print version" />
+                <input id="key" style="width: 3em;" type="number" onchange="key()" min="0" max="999" step="1" class="small" />
             </td>
             <td>HG</td>
             <td>1</td>
@@ -115,76 +117,89 @@
     </table>
 
     <script>
-var D = [
-    {
-        id: "HomeG",
-        col: "#7F7F7F"
-    },
-    {
-        id: "PsDev",
-        col: "#000000"
-    },
-    {
-        id: "1Chem",
-        col: "#FF0000"
-    },
-    {
-        id: "Elctr",
-        col: "#00FFD5"
-    },
-    {
-        id: "1ELit",
-        col: "#007FFF"
-    },
-    {
-        id: "1MMtA",
-        col: "#50008C"
-    },
-    {
-        id: "1MMtB",
-        col: "#000078"
-    },
-    {
-        id: "2Phys",
-        col: "#00A082"
-    },
-    {
-        id: "RProj",
-        col: "#FF7F00"
-    },
-]
+        var D = [
+            {
+                id: "HomeG",
+                col: "#7F7F7F"
+            },
+            {
+                id: "PsDev",
+                col: "#000000"
+            },
+            {
+                id: "1Chem",
+                col: "#FF0000"
+            },
+            {
+                id: "Elctr",
+                col: "#00FFD5"
+            },
+            {
+                id: "1ELit",
+                col: "#007FFF"
+            },
+            {
+                id: "1MMtA",
+                col: "#50008C"
+            },
+            {
+                id: "1MMtB",
+                col: "#000078"
+            },
+            {
+                id: "2Phys",
+                col: "#00A082"
+            },
+            {
+                id: "RProj",
+                col: "#FF7F00"
+            },
+        ]
 
-$("td").each(function(i) {
-    D.forEach(subj => {
-        if (subj.id == this.innerHTML) {
-            this.style.background = subj.col;
-            this.style.color = "white";
+        $("td").each(function (i) {
+            D.forEach(subj => {
+                if (subj.id == this.innerHTML) {
+                    this.style.background = subj.col;
+                    this.style.color = "white";
+                }
+            });
+        })
+
+        var T = new Date();
+        var sd = T.getDay();
+        if (T.getHours() > 15) {
+            sd++;
         }
-    });
-})
+        if (sd == 6 || sd == 0) sd = 1;
+        if (sd == 1) $("#to").hide();
+        else $("#tm").hide();
+        $("#" + sd).removeClass("h");
 
-var T = new Date();
-var sd = T.getDay();
-if (T.getHours() > 15) {   
-    sd++;
-}
-if (sd == 6 || sd == 0) sd = 1;
-if (sd == 1) $("#to").hide();
-else $("#tm").hide();
-$("#" + sd).removeClass("h");
+        function disp() {
+            $("#tm").show();
+            $("#to").show();
+            $("#1").removeClass("h");
+            $("#2").removeClass("h");
+            $("#3").removeClass("h");
+            $("#4").removeClass("h");
+            $("#5").removeClass("h");
+            //$("#Table").addClass("large");
+            //$("#disp").addClass("small");
+            document.getElementById("asostyle").setAttribute("href", "../ASO-L.css");
+        }
 
-function disp() {
-    $("#tm").show();
-    $("#to").show();
-    $("#1").removeClass("h");
-    $("#2").removeClass("h");
-    $("#3").removeClass("h");
-    $("#4").removeClass("h");
-    $("#5").removeClass("h");
-    //$("#Table").addClass("large");
-    //$("#disp").addClass("small");
-    document.getElementById("asostyle").setAttribute("href", "../ASO-L.css"); 
-}
+        // WATT Key Generator
+        function key() {     
+            var d = new Date().getHours();           
+            var WKA = Number($("#key").val());
+            for (let i = 0; i < d; i++) {
+                WKA *= WKA;
+                WKA %= 1000;
+            }
+            document.getElementById("key").value = WKA;
+        }
+
     </script>
 </body>
+
 </html>
