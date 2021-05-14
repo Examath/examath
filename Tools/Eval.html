@@ -3,6 +3,7 @@
 
 <head>
     <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
+    <script src="../ASO.js"></script>
     <meta name="year" content="2021" />
     <meta name="version" content="1.0" />
     <style>
@@ -12,6 +13,7 @@
 <body>
     <div class="toolbar">
         <input type="button" class="icon" value="&#xE768;" title="Run Script" onclick="Run()" />
+        <input type="button" onload="MarkAsToggle(this, Sat)" value="A"/>
         <div id="Time" class="text"></div>
     </div>
     <div class="split fill">
@@ -56,7 +58,6 @@ for (let index = 1; index <= 10; index++) {
         <div ><div id="Output" style="overflow: auto; max-height: 85vh;" class="console" title="Output box. Access using 'Output'">_</div></div>
         
     </div>
-    <script src="../ASO.js"></script>
     <script>
         var Data = Get("Data");
         var Script = Get("Script");
@@ -106,6 +107,11 @@ for (let index = 1; index <= 10; index++) {
             }
             return shuffled.slice(min);
         }
+
+        var Sat = new Dependable(false);
+        Sat.AddListener(function () {
+            Get("Output").innerHTML = Sat.Value;           
+        });
     </script>
 </body>
 
