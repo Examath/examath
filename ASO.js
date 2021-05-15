@@ -22,15 +22,17 @@ class Dependable {
      */
     get Value() {
         return this.value;
-    }    
+    }
     /**
      * Sets the value of this dependable and calls all it's listeners
      */
     set Value(x) {
-        this.value = x;
-        this.Listeners.forEach((e) => {
-            e();
-        })
+        if (this.value != x) {
+            this.value = x;
+            this.Listeners.forEach((e) => {
+                e();
+            })
+        }
     }
     /**
      * Subscribes a listening method onto this dependable
@@ -53,10 +55,23 @@ function MarkAsToggle(e, variable) {
     e.addEventListener("click", function () {
         variable.Value = (variable.Value) ? false : true;
     })
-    variable.AddListener(function () {        
+    variable.AddListener(function () {
         SwitchClass(e, "check", variable.Value);
     })
+    SwitchClass(e, "check", variable.Value);
 }
+
+function MarkAsChoice(e, variable) {
+    e.classList.add("choice");
+    e.addEventListener("click", function () {
+        variable.Value = e.dataset.value;
+    })
+    variable.AddListener(function () {
+        SwitchClass(e, "check", (variable.Value == e.dataset.value))
+    })
+    SwitchClass(e, "check", (variable.Value == e.dataset.value))
+}
+
 /**
  * Flips a toggle input and a variable.
  * @param {Element} e input.toggle target element
@@ -90,6 +105,11 @@ function SwitchClass(e, clas, val) {
 function Get(id) {
     return document.getElementById(id);
 }
+
+/**
+ * Function run after ASO.js is loaded
+ */
+var Loaded;
 
 /**
  * Get the value of a meta tag
@@ -153,11 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (vel) {
         vstr = " | Version " + vel.getAttribute('content');
     }
-    document.body.innerHTML += `<div class="notice" title="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.">Copyright &copy; <a href="https://github.com/alphax10">Paul Cyril</a> ${GetMeta("year", "2021")}</a>, <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html">GNU GPL v2.0</a>${vstr}</div>`;    
+    document.body.innerHTML += `<div class="notice" title="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.">Copyright &copy; <a href="https://github.com/alphax10">Paul Cyril</a> ${GetMeta("year", "2021")}</a>, <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0-standalone.html">GNU GPL v2.0</a>${vstr}</div>`;
     // Onload on input
     document.querySelectorAll("input[onload]").forEach(function (e) {
         e.dispatchEvent(new Event("load"));
     })
     //
     console.log("ASO.js loaded")
+    if (Loaded) {
+        Loaded();
+        console.log("Defined script loaded")
+    }
 })

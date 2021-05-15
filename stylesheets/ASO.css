@@ -42,6 +42,10 @@ div.toolbar, div.split>div {
     margin-left: 0.5em !important;
 }
 
+input.choice.spacer {
+    margin-left: 0 !important;
+}
+
 .large {
     font-size: 1.6em;
 }
@@ -57,6 +61,51 @@ div.toolbar, div.split>div {
 .console {
     font-family: 'Consolas', monospace;
     overflow-y: auto;
+}
+
+.flip-horizontaly {
+    transform: scale(-1, 1);
+}
+
+.flip-verticaly {
+    transform: scale(1, -1);
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+    background-color: var(--Panel);
+    width: 1rem;
+    height: 1rem;
+}
+
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-button {
+    background-color: var(--Panel);
+    border-style: solid;
+    border-color: transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:horizontal {    
+    border-width: 0.125rem 0;
+}
+
+::-webkit-scrollbar-thumb:vertical {    
+    border-width: 0 0.125rem;
+}
+
+::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-button:hover {
+    background-color: var(--Baseground);
+}
+
+::-webkit-scrollbar-button {   
+    border-width: 0.125rem; 
+    height: 1.1rem;
+    width: 1.1rem;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--Panel);
 }
 
 /* Panel */

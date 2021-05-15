@@ -1,4 +1,4 @@
-input, select, textarea {
+input, select, textarea, div[contenteditable=true] {
     background: var(--Background);
     color: var(--Foreground);
     box-sizing: border-box;
@@ -16,7 +16,7 @@ div.toolbar input, div.toolbar select {
     margin: 0 0.25em 0.25em 0;
 }
 
-input:hover, select:hover, textarea:hover {
+input:hover, select:hover, textarea:hover, div[contenteditable=true]:hover {
     border: 2px solid var(--Baseground);
 }
 
@@ -25,7 +25,7 @@ input[type=number] {
     text-align: right;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, div[contenteditable=true]:focus {
     background: var(--Foreground);
     color: var(--Background);
     outline: none;
@@ -35,18 +35,18 @@ input:invalid {
     border-color: var(--Error);
 }
 
-input.toggle:focus {
+input.toggle:focus, input.choice:focus {
     background: var(--Background);
     color: var(--Foreground);
 }
 
-input.toggle.check {
+input.toggle.check, input.choice.check {
     background: var(--Foreground);
     color: var(--Background);
 }
 
-input.toggle[checked] {
-    border-color: var(--Foreground);
+input.choice+input.choice {
+    margin-left: -0.25em;
 }
 
 .icon {
@@ -55,7 +55,7 @@ input.toggle[checked] {
     padding: 0;
 }
 
-textarea.fill {
+textarea.fill, div[contenteditable=true].fill {
     width: calc(100% - 0.25em);
     height: calc(100% - 0.3em);
     resize: none;

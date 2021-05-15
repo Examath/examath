@@ -6,44 +6,57 @@
     <meta name="year" content="2021" />
     <meta name="version" content="3.0" />
     <style>
-        #text {
+        #Text {
             font-size: 10mm;
             margin: 2rem;
+            padding: 2rem;
             width: calc(100vw - 8rem);
             height: calc(100vh - 8rem);
             background-color: var(--Background);
             color: var(--Foreground);
-            overflow-y: scroll;
-        }
-
-        #text.flipX {
-            transform: scaleX(-1);
-        }
-
-        #text.flipY {
-            transform: scaleY(-1);
+            overflow-y: auto;
         }
     </style>
 </head>
 
 <body>
-    <div class="toolbar">            
-        <input type="button" class="icon toggle check new" value="&#xE970;" title="Horizontaly flip text"
-            onclick="B = Check(this,B); SwitchClass(Get('text'), 'flipX', !B);" />
-        <input type="button" class="icon toggle" value="&#xE96E;" title="Verticaly flip text"
-            onclick="C = Check(this,C); SwitchClass(Get('text'), 'flipY', !C);" />
-        <input type="number" value="10" title="Font size" onchange="Get('text').style.fontSize = this.value + 'mm';" />
-        <input value="white" title="Colour" onchange="Get('text').style.color = this.value" />
-        <input value="Arial" title="Font" onchange="Get('text').style.fontFamily = this.value" />
+    <div class="toolbar">
+        <input type="button" value="&#xE739;" data-value="00" onload="MarkAsChoice(this, Transform)" class="icon" title="Normal"/>
+        <input type="button" value="&#xE746;" data-value="10" onload="MarkAsChoice(this, Transform)" class="icon" title="Horizontaly flip text"/>
+        <input type="button" value="&#xE745;" data-value="01" onload="MarkAsChoice(this, Transform)" class="icon flip-horizontaly" title="Verticaly flip text"/>
+        <input type="button" value="&#xE744;" data-value="11" onload="MarkAsChoice(this, Transform)" class="icon flip-horizontaly" title="Verticaly and Horizontaly flip text"/>
+        <input type="number" value="10" title="Font size" onchange="Get('Text').style.fontSize = this.value + 'mm';" />
+        <input value="white" title="Colour" onchange="Get('Text').style.color = this.value" />
+        <input value="Arial" title="Font" onchange="Get('Text').style.fontFamily = this.value" />
     </div>
-    <div id="text" class="flipX" contenteditable="true">
-Hello
-Reflect this off a transparent sheet in front of the camera.
+    <div id="Text" class="flll" contenteditable="true">
+        Hello
+        Reflect this off a transparent sheet in front of the camera.
     </div>
     <script src="../ASO.js"></script>
     <script>
-        var B = false;
-	var C = true;
+        var Text;
+        Loaded = function () {
+            Text = Get("Text")
+            Text.style.transform = "scale(-1,1)";
+        };
+        var Transform = new Dependable("10",function () {
+            console.log(Transform.Value);
+            switch (Transform.value) {
+                case "00":
+                    Text.style.transform = "scale(1,1)";
+                    break;
+                case "10":
+                    Text.style.transform = "scale(-1,1)";
+                    break;
+                case "01":
+                    Text.style.transform = "scale(1,-1)";
+                    break;
+                case "11":
+                    Text.style.transform = "scale(-1,-1)";
+                    break;
+            }
+        });
     </script>
 </body>
 
