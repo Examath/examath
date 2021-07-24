@@ -71,6 +71,10 @@ input.choice.spacer {
     transform: scale(1, -1);
 }
 
+.collapsed {
+    display: none !important;
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {
@@ -110,34 +114,81 @@ input.choice.spacer {
 
 /* Panel */
 
-div.split {
-    flex-wrap: nowrap;
+div.panel>div:first-child {
+    height: 100%;
+    resize: none;
 }
 
-div.split>div {
-    resize: horizontal;
-    overflow: auto;
+div.panel>div:last-child {
+    visibility: hidden;
+}
+
+    /* Gridding */
+
+div.panel div{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
     min-width: 1em;
     min-height: 1em;
+    resize: horizontal;
 }
 
-div.split.vertical {
-    flex-direction: column;
-}
-
-div.split.vertical>div {
+div.panel div[data-dir="vertical"]>div {
     resize: vertical;
 }
 
-div.split>div:last-child {
+div.panel div[data-dir="horizontal"]>div {
+    resize: horizontal;
+}
+
+div.panel div[data-dir="vertical"] {
+    flex-direction: column;
+}
+
+div.panel div:last-child {
     resize: none;
     flex: 1 1 auto;
 }
 
-div.split>div.split {
+div.panel div>div {
     background: none;
     margin: 0;
     padding: 0;
+}
+
+    /* Section */
+div.panel section {
+    width: calc(100% - 0.5em);
+    height: calc(100% - 1.75em);
+    margin: 0 0.25em 0.25em 0;
+    padding: 1.5em 0 0 0.25em;
+    background-color: var(--Panel);
+    position: relative;
+}
+
+div.panel section div {
+    resize: unset !important;
+}
+
+div.panel section>header {
+    background-color: rgb(27, 17, 19);
+    position: absolute;
+    display: block;
+    height: 1.5em;
+    top: 0;
+}
+
+    /*Private use*/
+
+#PanelUIRect {
+    position: fixed;
+    width: 4em;
+    height: 4em;
+    background-color: var(--MetaBackground);
+    border: 2px solid var(--MetaForeground);
+    box-sizing: border-box;
+    visibility: hidden;
 }
 
 @keyframes new {
