@@ -1,3 +1,4 @@
+//#region Dependable
 /**
  * Akin to C# DependencyProperty
  */
@@ -43,6 +44,9 @@ class Dependable {
     }
 }
 
+//#endregion
+
+//#region Inputs
 /**
  * Marks a <input> element as a Toggle button controling the specified dependable
  * @param {Element} e The input button element target
@@ -93,6 +97,11 @@ function Check(e, val) {
     return (val) ? false : true;
 }
 
+//#endregion
+
+//#region Old DOM
+
+
 /**
  * Adds or removes a class
  * @param {Element} e Target element
@@ -116,11 +125,6 @@ function Get(id) {
 }
 
 /**
- * Function run after ASO.js is loaded
- */
-var Loaded;
-
-/**
  * Get the value of a meta tag
  * @param {String} name Name of meta tag
  * @param {String} def Value to return if that tag does not exist
@@ -134,16 +138,22 @@ function GetMeta(name, def) {
     return def;
 }
 
+//#endregion
+
+/**
+ * Function run after ASO.js is loaded
+ */
+var Loaded;
+
 const A = {
+    //#region Variables
     Root: document.querySelector(":root"),
     X: 0,
     Y: 0,
     MouseX: 0,
     MouseY: 0,
-    PanelRoot: null, // For panel (avalon dock) element
-    Sections: null, // List of sections (windows) inside panel
-    MovingSection: null, // Section that is being dragged
-    PanelRect: null, // Overlay?? for panel element
+    //#endregion
+    //#region Functions
     /**
      * Return the index of the greatest number in an array
      * @param {Number[]} array 
@@ -174,6 +184,8 @@ const A = {
         }
         return I;
     },
+    //#endregion
+    //#region Theme and Colours
     Theme: {
         /**
          * Set style to ASO-L.css (light theme)
@@ -223,29 +235,229 @@ const A = {
         };
         return `#${f(0)}${f(8)}${f(4)}`;
     },
-    PanelDivsDirSet: function (e) {
-        var childdir = (!(e.dataset.dir == "vertical"));
-        e.childNodes.forEach(element => {
-            if (element.nodeName == "DIV") {
-                element.dataset.dir = (childdir) ? "vertical" : "horizontal";
-                A.PanelDivsDirSet(element);
+    //#endregion
+    //#region Panel
+    Panel: {
+        Layout: "",
+        Root: null, // For panel (avalon dock) element
+        Display: null,
+        Sections: null, // List of sections (windows) inside panel
+        MovingSection: null, // Section that is being dragged
+        Rect: null, // Overlay for panel element
+        DivsDirSet: function (e) {
+            var childdir = (!(e.dataset.dir == "vertical"));
+            e.childNodes.forEach(element => {
+                if (element.nodeName == "DIV") {
+                    element.dataset.dir = (childdir) ? "vertical" : "horizontal";
+                    A.Panel.DivsDirSet(element);
+                }
+            });
+
+        },
+        DivsDirVir: function (e, top = false) {
+            var childdir = (!(e.dataset.dir == "vertical"));
+            if (e.childElementCount == 1) {
+                console.log(`> ${e.children[0].dataset.name}`);
+                return e.children[0].dataset.name;
             }
-        });
+            else {
+                var ret = "";
+                e.childNodes.forEach(element => {
+                    if (element.nodeName == "DIV") {
+                        if ((element.dataset.dir == "vertical") != (childdir)) {
+                            console.error("Panel formating error", element);
+                        }
+                        ret += A.Panel.DivsDirVir(element) + " ";
+                    }
+                })
+                if (top) return ret;
+                return `[%00 ${ret}]`;
+            }
+        },
+        /**
+         * Readys the Panel
+         */
+        Load: function () {
+            A.Panel.Display = document.createElement("div");
+            A.Panel.Root.prepend(A.Panel.Display);
+            A.Panel.Display.dataset.super = "True";
+            if (A.Panel.Display.dataset.dir == undefined) A.Panel.Display.dataset.dir = "horizontal";
+
+            // Sections
+            var i = 0;
+            A.Panel.Sections.forEach(function (e) {
+                var el = document.createElement("header");
+                el.innerHTML = e.dataset.name;
+                e.prepend(el);
+
+                //if (!e.id) e.id = i + "Section";
+                e.draggable = true;
+                e.addEventListener("dragstart", function (event) {
+                    //console.log(event);
+                    A.Panel.MovingSections = event.target;
+                    A.Panel.MovingSections.style.opacity = 0.3;
+                })
+                i++;
+                var container = document.createElement("div");
+                container.append(e);
+                A.Panel.Display.append(container);
+            })
+            // Builder
+
+            A.Panel.DivsDirSet(A.Panel.Display);
+
+            // Blue UI Ques when dragging panel
+            A.Panel.Rect = document.createElement("div");
+            A.Panel.Rect.id = "PanelUIRect";
+            document.body.appendChild(A.Panel.Rect);
+            window.addEventListener("dragover", A.Panel.DragOver)
+
+            // When panel drag is stopped.
+            window.addEventListener("dragend", A.Panel.DragEnd)
+        },
+        /**
+         * Draws Guide Boxes for panel moving
+         * @param {*} event 
+         */
+        DragOver: function (event) {
+            var PanelBounds = A.Panel.Root.getBoundingClientRect();
+            if (
+                event.pageX > PanelBounds.left
+                && event.pageX < PanelBounds.right
+                && event.pageY > PanelBounds.top
+                && event.pageY < PanelBounds.bottom
+            ) { // Cursor still inside panel
+                for (let i = 0; i < A.Panel.Sections.length; i++) { // For each section
+                    if (A.Panel.Sections[i].dataset.name == A.Panel.MovingSections.dataset.name) continue;
+                    var Section = A.Panel.Sections[i].getBoundingClientRect();
+                    if (event.pageX > Section.left && event.pageX < Section.right && event.pageY > Section.top && event.pageY < Section.bottom) {
+                        var DistSet = [
+                            event.pageY - Section.top,
+                            Section.right - event.pageX,
+                            Section.bottom - event.pageY,
+                            event.pageX - Section.left,
+                        ]
+                        var W = 32;
+                        var pos = A.Lowest(DistSet);
+                        switch (pos) {
+                            case 0: // Top
+                                A.Panel.Rect.style.top = Section.top + "px";
+                                A.Panel.Rect.style.left = Section.left + "px";
+                                A.Panel.Rect.style.width = Section.width + "px";
+                                A.Panel.Rect.style.height = W + "px";
+                                break;
+                            case 1: // Right
+                                A.Panel.Rect.style.top = Section.top + "px";
+                                A.Panel.Rect.style.left = Section.right - W + "px";
+                                A.Panel.Rect.style.width = W + "px";
+                                A.Panel.Rect.style.height = Section.height + "px";
+                                break;
+                            case 2: // Bottom
+                                A.Panel.Rect.style.top = Section.bottom - W + "px";
+                                A.Panel.Rect.style.left = Section.left + "px";
+                                A.Panel.Rect.style.width = Section.width + "px";
+                                A.Panel.Rect.style.height = W + "px";
+                                break;
+                            case 3: // Left
+                                A.Panel.Rect.style.top = Section.top + "px";
+                                A.Panel.Rect.style.left = Section.left + "px";
+                                A.Panel.Rect.style.width = W + "px";
+                                A.Panel.Rect.style.height = Section.height + "px";
+                                break;
+                        }
+                        //A.Panel.Rect.innerHTML = pos;
+                        event.preventDefault();
+                        A.Panel.Rect.style.visibility = "visible";
+                        return;
+                    }
+                }
+                A.Panel.Rect.style.visibility = "hidden";
+            }
+            else {
+                A.Panel.Rect.style.visibility = "hidden";
+            }
+        },
+        /**
+         * Moves individual panels (Sections) around when user releases a drag operation
+         * @param {DragEvent} event 
+         */
+        DragEnd: function (event) {
+            A.Panel.MovingSections.style.opacity = 1;
+            A.Panel.Rect.style.visibility = "hidden";
+
+            var Panel = A.Panel.Root.getBoundingClientRect();
+            if (event.pageX > Panel.left && event.pageX < Panel.right && event.pageY > Panel.top && event.pageY < Panel.bottom) {
+                for (let i = 0; i < A.Panel.Sections.length; i++) {
+                    if (A.Panel.Sections[i].dataset.name == A.Panel.MovingSections.dataset.name) continue;
+                    var Section = A.Panel.Sections[i].getBoundingClientRect(); // Landing Section Bounding Box
+                    if (event.pageX > Section.left && event.pageX < Section.right && event.pageY > Section.top && event.pageY < Section.bottom) { // Landing Section found
+                        // Get parent containers
+                        var MajorFromDiv = A.Panel.MovingSections.parentElement.parentElement;
+                        var ToDiv = A.Panel.Sections[i].parentElement;
+
+                        // Det method
+                        var DistSet = [
+                            event.pageY - Section.top,
+                            Section.right - event.pageX,
+                            Section.bottom - event.pageY,
+                            event.pageX - Section.left,
+                        ]
+                        var pos = A.Lowest(DistSet);
+
+                        var IsDeep = (pos == 0 || pos == 2);
+                        if (ToDiv.parentElement.dataset.dir == "vertical") IsDeep = !IsDeep;
+                        //console.log(IsDeep);
+                        if (IsDeep) {
+                            // Organise ToDiv
+                            var SubDiv = document.createElement("div");
+                            SubDiv.append(ToDiv.children[0]);
+                            ToDiv.append(SubDiv);
+                            SubDiv.dataset.dir = (ToDiv.dataset.dir == "vertical") ? "horizontal" : "vertical";
+                            A.Panel.MovingSections.parentElement.dataset.dir = (ToDiv.dataset.dir == "vertical") ? "horizontal" : "vertical";
+                            // Move
+                            if (pos == 0 || pos == 3) {
+                                ToDiv.prepend(A.Panel.MovingSections.parentElement);
+                            }
+                            else {
+                                ToDiv.appendChild(A.Panel.MovingSections.parentElement);
+                            }
+                        }
+                        else {
+                            A.Panel.MovingSections.parentElement.dataset.dir = ToDiv.dataset.dir;
+                            if (pos == 0 || pos == 3) {
+                                ToDiv.parentElement.insertBefore(A.Panel.MovingSections.parentElement, ToDiv);
+                            }
+                            else {
+                                ToDiv.parentElement.insertBefore(A.Panel.MovingSections.parentElement, ToDiv.nextSibling);
+                            }
+                        }
+
+                        // Mop Up
+                        console.log(MajorFromDiv);
+                        if (MajorFromDiv.childElementCount == 1) {
+                            if (MajorFromDiv.dataset.super == "True") {
+                                MajorFromDiv.children[0].dataset.super = "True";
+                                A.Panel.Display = MajorFromDiv.children[0];
+                            }
+                            MajorFromDiv.replaceWith(MajorFromDiv.children[0]);
+                            A.Panel.DivsDirSet(A.Panel.Display);
+                        }
+                        console.log(A.Panel.DivsDirVir(A.Panel.Display, true));
+                        break;
+                    }
+                }
+            }
+        },
+
     },
-    PanelDivsDirVir: function (e) {
-        var childdir = (!(e.dataset.dir == "vertical"));
-        e.childNodes.forEach(element => {
-            if (element.nodeName == "DIV") {
-                if((element.dataset.dir == "vertical") != (childdir)) {
-                    console.error("Panel formating error", element);
-                };
-                A.PanelDivsDirVir(element);
-            }
-        });
-    }
+
+    //#endregion
 }
-// Footer
+
+//#region Events
+
 document.addEventListener("DOMContentLoaded", () => {
+    //#region T
     // Version Info and Styling
     var vstr = "";
     var vel = document.querySelector(`meta[name="version"]`);
@@ -260,156 +472,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     // Definitions
-    A.Sections = document.querySelectorAll("div.panel section");
-    A.PanelRoot = document.querySelector("div.panel");
+    A.Panel.Sections = document.querySelectorAll("div.panel section");
+    A.Panel.Root = document.querySelector("div.panel");
     A.Theme.Root = document.querySelector(`link[href$="ASO.css"]`);
-
+    //#endregion
     // Panel
-    var i = 0;
-    A.Sections.forEach(function (e) {
-        var el = document.createElement("header");
-        el.innerHTML = e.dataset.name;
-        e.prepend(el);
 
-        //if (!e.id) e.id = i + "Section";
-        e.draggable = true;
-        e.addEventListener("dragstart", function (event) {
-            console.log(event);
-            A.MovingSection = event.target;
-            A.MovingSection.style.opacity = 0.3;
-        })
-        i++;
-    })
-
-    if (A.PanelRoot) { // If a panel exists
-        A.PanelRect = document.createElement("div");
-        A.PanelRect.id = "PanelUIRect";
-        document.body.appendChild(A.PanelRect);
-        A.PanelRoot.children[0].dataset.super = "True";
-        if (A.PanelRoot.children[0].dataset.dir == undefined) A.PanelRoot.children[0].dataset.dir = "horizontal";
-        A.PanelDivsDirSet(A.PanelRoot.children[0]);
-    }
-
-    // Blue UI Ques when dragging panel
-    window.addEventListener("dragover", function (event) {
-        var Panel = A.PanelRoot.getBoundingClientRect();
-        if (event.pageX > Panel.left && event.pageX < Panel.right && event.pageY > Panel.top && event.pageY < Panel.bottom) {
-            for (let i = 0; i < A.Sections.length; i++) {
-                if (A.Sections[i].dataset.name == A.MovingSection.dataset.name) continue;
-                var Section = A.Sections[i].getBoundingClientRect();
-                if (event.pageX > Section.left && event.pageX < Section.right && event.pageY > Section.top && event.pageY < Section.bottom) {
-                    var DistSet = [
-                        event.pageY - Section.top,
-                        Section.right - event.pageX,
-                        Section.bottom - event.pageY,
-                        event.pageX - Section.left,
-                    ]
-                    var W = 32;
-                    var pos = A.Lowest(DistSet);
-                    switch (pos) {
-                        case 0: // Top
-                            A.PanelRect.style.top = Section.top + "px";
-                            A.PanelRect.style.left = Section.left + "px";
-                            A.PanelRect.style.width = Section.width + "px";
-                            A.PanelRect.style.height = W + "px";
-                            break;
-                        case 1: // Right
-                            A.PanelRect.style.top = Section.top + "px";
-                            A.PanelRect.style.left = Section.right - W + "px";
-                            A.PanelRect.style.width = W + "px";
-                            A.PanelRect.style.height = Section.height + "px";
-                            break;
-                        case 2: // Bottom
-                            A.PanelRect.style.top = Section.bottom - W + "px";
-                            A.PanelRect.style.left = Section.left + "px";
-                            A.PanelRect.style.width = Section.width + "px";
-                            A.PanelRect.style.height = W + "px";
-                            break;
-                        case 3: // Left
-                            A.PanelRect.style.top = Section.top + "px";
-                            A.PanelRect.style.left = Section.left + "px";
-                            A.PanelRect.style.width = W + "px";
-                            A.PanelRect.style.height = Section.height + "px";
-                            break;
-                    }
-                    //A.PanelRect.innerHTML = pos;
-                    event.preventDefault();
-                    A.PanelRect.style.visibility = "visible";
-                    return;
-                }
-            }
-            A.PanelRect.style.visibility = "hidden";
-        }
-        else {
-            A.PanelRect.style.visibility = "hidden";
-        }
-    })
-
-    // When panel drag is stopped.
-    window.addEventListener("dragend", function (event) {
-        A.MovingSection.style.opacity = 1;
-        A.PanelRect.style.visibility = "hidden";
-
-        var Panel = A.PanelRoot.getBoundingClientRect();
-        if (event.pageX > Panel.left && event.pageX < Panel.right && event.pageY > Panel.top && event.pageY < Panel.bottom) {
-            for (let i = 0; i < A.Sections.length; i++) {
-                if (A.Sections[i].dataset.name == A.MovingSection.dataset.name) continue;
-                var Section = A.Sections[i].getBoundingClientRect(); // Landing Section Bounding Box
-                if (event.pageX > Section.left && event.pageX < Section.right && event.pageY > Section.top && event.pageY < Section.bottom) { // Landing Section found
-                    // Get parent containers
-                    var MajorFromDiv = A.MovingSection.parentElement.parentElement;
-                    var ToDiv = A.Sections[i].parentElement;
-
-                    // Det method
-                    var DistSet = [
-                        event.pageY - Section.top,
-                        Section.right - event.pageX,
-                        Section.bottom - event.pageY,
-                        event.pageX - Section.left,
-                    ]
-                    var pos = A.Lowest(DistSet);
-
-                    var IsDeep = (pos == 0 || pos == 2);
-                    if (ToDiv.parentElement.dataset.dir == "vertical") IsDeep = !IsDeep;
-                    console.log(IsDeep);
-                    if (IsDeep) {
-                        // Organise ToDiv
-                        var SubDiv = document.createElement("div");
-                        SubDiv.append(ToDiv.children[0]);
-                        ToDiv.append(SubDiv);
-                        SubDiv.dataset.dir = (ToDiv.dataset.dir == "vertical") ? "horizontal" : "vertical";
-                        A.MovingSection.parentElement.dataset.dir = (ToDiv.dataset.dir == "vertical") ? "horizontal" : "vertical";
-                        // Move
-                        if (pos == 0 || pos == 3) {
-                            ToDiv.prepend(A.MovingSection.parentElement);
-                        }
-                        else {
-                            ToDiv.appendChild(A.MovingSection.parentElement);
-                        }
-                    }
-                    else {
-                        A.MovingSection.parentElement.dataset.dir = ToDiv.dataset.dir;
-                        if (pos == 0 || pos == 3) {
-                            ToDiv.parentElement.insertBefore(A.MovingSection.parentElement, ToDiv);
-                        }
-                        else {
-                            ToDiv.parentElement.insertBefore(A.MovingSection.parentElement, ToDiv.nextSibling);
-                        }
-                    }
-
-                    // Mop Up
-                    console.log(MajorFromDiv);
-                    if (MajorFromDiv.childElementCount == 1) {
-                        if (MajorFromDiv.dataset.super == "True") MajorFromDiv.children[0].dataset.super = "True";
-                        MajorFromDiv.replaceWith(MajorFromDiv.children[0]);
-                        A.PanelDivsDirSet(A.PanelRoot.children[0]);
-                    }
-                    A.PanelDivsDirVir(A.PanelRoot.children[0]);
-                    break;
-                }
-            }
-        }
-    })
+    if (A.Panel.Root) A.Panel.Load();
 
     console.log("ASO.js loaded")
 
@@ -424,3 +493,5 @@ window.addEventListener("mousemove", function (event) {
     A.MouseY = event.pageY;
     //console.log(A.MouseX);
 })
+
+//#endregion
