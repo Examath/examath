@@ -2,7 +2,7 @@
 @import "table.css";
 @import "input.css";
 html {
-    background: var(--Background);
+    background: var(--DialogBackground);
     height: 100%;
     overflow: hidden;
 }
@@ -11,25 +11,19 @@ body {
     color: var(--Foreground);
     font-family: Segoe UI, Arial, Helvetica, sans-serif;
     font-size: 1em;
-    margin: 0.25em 0.25em 1em 0.25em;
-    padding: 0.25em 0 0 0.25em;
+    margin: 0 0 1em 0;
+    padding: 0.375em;
     display: flex;
     flex-direction: column;
     height: calc(100% - 2em);
 }
 
-canvas, table {
-    margin: 0 0.25em 0.25em 0;
+canvas, table, div.panel {
+    margin: 0.125em;
 }
 
 div.toolbar, div.split {
     display: flex;
-}
-
-div.toolbar, div.split>div {
-    margin: 0 0.25em 0.25em 0;
-    padding: 0.25em 0 0 0.25em;
-    background: var(--Panel);
 }
 
 /* General */
@@ -42,8 +36,8 @@ div.toolbar, div.split>div {
     margin-left: 0.5em !important;
 }
 
-input.choice.spacer {
-    margin-left: 0 !important;
+button.choice.spacer {
+    margin-left: 0.125rem !important;
 }
 
 .large {
@@ -73,6 +67,12 @@ input.choice.spacer {
 
 .collapsed {
     display: none !important;
+}
+
+.number {
+    text-align: right;
+    font-family: 'Consolas', monospace;
+    font-size: 1em !important;
 }
 
 /* Scrollbar */

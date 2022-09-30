@@ -5,11 +5,18 @@
     --Background: black;
     --Foreground: white;
     --Baseground: grey;
+
+    --DialogBackground: #222222;
     --Panel: rgba(100, 100, 100, 0.4);
     --Panel2: rgba(64, 64, 64); /* Colour of two --Panel against black, used for tooltips */
     --PanelFaint: rgba(100, 100, 100, 0.2);
-    --Error: red;
+
     --New: rgb(0, 255, 0);
+    --Old: #C3C040;
     --MetaForeground: cyan;
     --MetaBackground: rgba(0, 128, 128, 0.4);
+
+    --Error: red;
+    --Warning: yellow;
+    --Invalid: #FF8000;
 }

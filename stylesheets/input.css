@@ -1,4 +1,4 @@
-input, select, textarea, div[contenteditable=true] {
+button, input, select, textarea, div[contenteditable=true] {
     background: var(--Background);
     color: var(--Foreground);
     box-sizing: border-box;
@@ -6,17 +6,17 @@ input, select, textarea, div[contenteditable=true] {
     border: 2px solid var(--Background);
 }
 
-input, select {
+button, input, select {
     vertical-align: text-bottom;
     font-size: 0.8333333em;
 }
 
-div.toolbar input, div.toolbar select {
-    height: 1.80em;
-    margin: 0 0.25em 0.25em 0;
+div.toolbar button, div.toolbar input, div.toolbar select {
+    height: 1.6rem;
+    margin: 0.125rem;
 }
 
-input:hover, select:hover, textarea:hover, div[contenteditable=true]:hover {
+button:hover, input:hover, select:hover, textarea:hover, div[contenteditable=true]:hover {
     border: 2px solid var(--Baseground);
 }
 
@@ -25,7 +25,7 @@ input[type=number] {
     text-align: right;
 }
 
-input:focus, textarea:focus, div[contenteditable=true]:focus {
+button:active, input:focus, textarea:focus, div[contenteditable=true]:focus {
     background: var(--Foreground);
     color: var(--Background);
     outline: none;
@@ -35,24 +35,30 @@ input:invalid {
     border-color: var(--Error);
 }
 
-input.toggle:focus, input.choice:focus {
+button.toggle:focus, button.choice:focus {
     background: var(--Background);
     color: var(--Foreground);
 }
 
-input.toggle.check, input.choice.check {
+button.toggle.check, button.choice.check {
     background: var(--Foreground);
     color: var(--Background);
 }
 
-input.choice+input.choice {
-    margin-left: -0.25em;
+button.choice+button.choice {
+    margin-left: -0.125rem;
 }
 
 .icon {
     font-family: Segoe MDL2 Assets;
     width: 1.8em;
     padding: 0;
+}
+
+button > span.icon {
+    position: relative;
+    top: 0.132em;
+    left: -0.175em;
 }
 
 textarea.fill, div[contenteditable=true].fill {

@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link id="asostyle" rel="stylesheet" type="text/css" href="../ASO.css">
+    <script src="../ASO.js"></script>
+    <meta name="year" content="2022" />
+    <meta name="version" content="0.1" />
+
+    <title>Counter</title>
+</head>
+<body>
+<!--div class="toolbar">
+<button>Ref</button>
+</div-->
+    <button class="fill" style="font-size: 10em;" onclick="Increment(this)">0</button>
+<script>
+var n = 0;
+function Increment(sender)
+{
+    n++;   
+    sender.innerHTML = n; 
+}
+</script>
+</body>
+</html>
