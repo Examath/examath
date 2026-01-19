@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
         <li>Ensures all <code>&lt;Name&gt;</code> values are unique</li>
         <li>Updates all reference attributes ending in <code>Ref</code></li> 
     </ul>
-    <p><b>Disclaimer: </b>This tool is almost entirley generated using LLM (GPT-5.1). The code has been audited for functionality but not for form. Created: 19/01/2026.</p>
+    <p><b>Disclaimer: </b>This tool was partly generated using LLM (GPT-5.1). The code has been audited for functionality but not for form. Created: 19/01/2026 - 20/01/2026. Paul Cyril.</p>
 
     <div class="toolbar">
         <input type="file" id="fileInput" accept=".xml">
@@ -50,54 +50,59 @@ async function process() {
         }
 
         // STEP 1 — Build map of oldId → newId
-        const idMap = {};
+        const idMap = new Map();
+        const newIds = new Set();
+        var dupNewIds = 0;
         const items = xml.querySelectorAll("[id]");
+        
+        status.textContent += `\n${items.length} elements with ids found.`;
 
         items.forEach(el => {
             const oldId = el.getAttribute("id");
             const nameEl = el.querySelector(":scope > Name");
 
             if (oldId.startsWith("aim") && nameEl) {
-                const newId = nameEl.textContent.trim();
+                var newId = nameEl.textContent.trim();
 
-                if (idMap[oldId]) {
+                if (idMap.has(oldId)) {
                     throw new Error(`Duplicate id attribute '${oldId}'`);
                 }
 
-                idMap[oldId] = newId;
+                if (newIds.has(newId)) {
+                    dupNewIds++;
+                    newId = `${nameEl.textContent.trim()} <${el.tagName}>`;
+                }
+
+                if (newIds.has(newId)) {
+                    newId = `${nameEl.textContent.trim()} [${oldId}]`;
+                }
+
+                idMap.set(oldId, newId);
+                newIds.add(newId);
             }
         });
 
-        status.textContent += `\n${Object.keys(idMap).length} aim**** ids found.`;
-        console.table(idMap);
+        status.textContent += `\n${idMap.size} aim**** ids found, where names are more suitable.`;
+        status.textContent += `\n${dupNewIds} duplicate names found.`;
+        console.table(Array.from(idMap, ([key, value]) => ({ Key: key, Value: value })));
 
-        // STEP 2 — Ensure Name values are unique
-        const nameValues = Object.values(idMap);
-        const duplicates = nameValues.filter((v, i) => nameValues.indexOf(v) !== i);
-
-        if (duplicates.length > 0) {
-            throw new Error("Duplicate <Name> values:\n  " + duplicates.join("\n  "));
-        }
-
-        status.textContent += "\nNo unique names found, which is good.";
-
-        // STEP 3 — Replace id attributes
+        // STEP 2 — Replace id attributes
 
         items.forEach(el => {
             const oldId = el.getAttribute("id");
-            if (idMap[oldId]) {
-                el.setAttribute("id", idMap[oldId]);
+            if (idMap.has(oldId)) {
+                el.setAttribute("id", idMap.get(oldId));
             }
         });
 
-        // STEP 4 — Update reference attributes (any attr ending with "Ref")
+        // STEP 3 — Update reference attributes (any attr ending with "Ref")
         var repCount = 0;
         xml.querySelectorAll("*").forEach(el => {
             for (const attr of el.attributes) {
                 if (attr.name.toLowerCase().endsWith("ref")) {
-                    const oldRef = attr.value;
-                    if (idMap[oldRef]) {
-                        attr.value = idMap[oldRef];
+                    const oldId = attr.value;
+                    if (idMap.has(oldId)) {
+                        attr.value = idMap.get(oldId);
                         repCount++;
                     }
                 }
@@ -124,6 +129,7 @@ async function process() {
 
     } catch (err) {
         status.textContent += "\nError: " + err.message;
+        throw err;
     }
 };
     </script>
